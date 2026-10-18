@@ -1,0 +1,83 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/variableLibrary/definition/variables/1.0.0/schema.json",
+  "variables": [
+    {
+      "name": "workspace_name",
+      "note": "Fabric workspace holding the P30 estate. Prod value set overrides.",
+      "type": "String",
+      "value": "StraitsLine-Dev"
+    },
+    {
+      "name": "capacity_id",
+      "note": "Trial FTL64, Malaysia West. Env-specific.",
+      "type": "String",
+      "value": "14e682a7-70e3-4636-a78c-76aaa2e11be1"
+    },
+    {
+      "name": "generator_seed",
+      "note": "Fixed seed. Changing it invalidates every frozen control total.",
+      "type": "Integer",
+      "value": 20261017
+    },
+    {
+      "name": "window_days",
+      "note": "Days of history generated (contract section 5).",
+      "type": "Integer",
+      "value": 60
+    },
+    {
+      "name": "window_start_date",
+      "note": "First day of the generated window.",
+      "type": "String",
+      "value": "2026-08-01"
+    },
+    {
+      "name": "vessel_count",
+      "note": "Regional feeder fleet.",
+      "type": "Integer",
+      "value": 12
+    },
+    {
+      "name": "voyage_count",
+      "note": "Contract section 5.",
+      "type": "Integer",
+      "value": 60
+    },
+    {
+      "name": "booking_count",
+      "note": "Contract section 5.",
+      "type": "Integer",
+      "value": 4000
+    },
+    {
+      "name": "container_count",
+      "note": "Contract section 5.",
+      "type": "Integer",
+      "value": 9000
+    },
+    {
+      "name": "ping_interval_min",
+      "note": "AIS-style ping cadence while under way (5-10 min range).",
+      "type": "Integer",
+      "value": 8
+    },
+    {
+      "name": "enable_dirty_data",
+      "note": "Duplicate pings, out-of-order timestamps, land-drift GPS.",
+      "type": "Boolean",
+      "value": true
+    },
+    {
+      "name": "congested_ports",
+      "note": "Injected congestion windows (named in the generator spec, never in detection thresholds).",
+      "type": "String",
+      "value": "Port Klang,Tanjung Priok"
+    },
+    {
+      "name": "book_ccy",
+      "note": "Freight economics currency.",
+      "type": "String",
+      "value": "USD"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "VariableLibrary",
+    "displayName": "VL_StraitsLine",
+    "description": "Every environment-specific value for P30 (contract component 1)."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6fad5b5f-4789-a772-4b69-5da03a74e238"
+  }
+}
