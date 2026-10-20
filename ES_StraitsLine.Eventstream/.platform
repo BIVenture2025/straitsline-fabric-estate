@@ -3,7 +3,7 @@
   "metadata": {
     "type": "Eventstream",
     "displayName": "ES_StraitsLine",
-    "description": "P30 component 4. Topology (CustomEndpoint source -> EH_StraitsLine) wired in the UI by the owner in S2; the authored eventstream.json is in 02_Platform and retried in S3 against the read-back schema."
+    "description": "P30 component 4. CustomEndpoint source -> DefaultStream -> EH_StraitsLine.ais_ping_raw (ProcessedIngestion). Deployed by REST from 02_Platform/eventstream.json in S2b (2026-10-20). Ingestion unproven until the S3 replay row count."
   },
   "config": {
     "version": "2.0",
