@@ -1,0 +1,17 @@
+/// Vessel in the StraitsLine feeder network.
+entity Vessel
+	lineageTag: a0000000-0000-4000-8000-000000000010
+	keyProperty: VesselId
+
+	property VesselId
+		dataType: string
+		lineageTag: 1e1511f7-ced3-5fa9-bcc0-6a9e67f9ae54
+
+	property VesselName
+		dataType: string
+		lineageTag: a03cfb36-abb2-5b38-9271-ceac5686d275
+
+	property TeuCapacity
+		dataType: int64
+		lineageTag: 07c0d54c-74c4-50d0-a56d-791f99832ba7
+

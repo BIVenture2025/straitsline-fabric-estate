@@ -1,0 +1,17 @@
+/// Port in the StraitsLine feeder network.
+entity Port
+	lineageTag: a0000000-0000-4000-8000-000000000020
+	keyProperty: PortId
+
+	property PortId
+		dataType: string
+		lineageTag: 228f4ea6-eee9-568c-82ee-b57a96e224bc
+
+	property PortName
+		dataType: string
+		lineageTag: 49339f26-3139-51f3-bb35-51c2d1570d03
+
+	property Country
+		dataType: string
+		lineageTag: d31e9d9e-88f8-5d23-bb00-f48872493340
+

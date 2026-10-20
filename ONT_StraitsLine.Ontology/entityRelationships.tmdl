@@ -1,0 +1,10 @@
+entityRelationship VoyageOperatedBy
+	lineageTag: b0000000-0000-4000-8000-000000000001
+	fromEntity: Voyage
+	toEntity: Vessel
+
+entityRelationship VoyageCallsAt
+	lineageTag: b0000000-0000-4000-8000-000000000002
+	fromEntity: Voyage
+	toEntity: Port
+

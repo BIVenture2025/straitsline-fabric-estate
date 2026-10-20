@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Lakehouse",
+    "displayName": "LH_StraitsLine",
+    "description": "P30 reference data, bookings, containers, GeoJSON; Silver/Gold via MLVs. Schema-enabled (contract component 3)."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3a48287f-0079-b92f-4b75-6e34d2b82ad9"
+  }
+}

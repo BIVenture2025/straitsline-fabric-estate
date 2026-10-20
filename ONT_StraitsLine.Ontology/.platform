@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Ontology",
+    "displayName": "ONT_StraitsLine",
+    "description": "P30 ontology - S1 kill-criterion test: Vessel, Port, Voyage + 2 relationships, ontology-first (unbound)."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f1e54504-b85f-ba66-4e69-db7ee934cb0b"
+  }
+}

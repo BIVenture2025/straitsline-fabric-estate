@@ -1,0 +1,13 @@
+/// Voyage in the StraitsLine feeder network.
+entity Voyage
+	lineageTag: a0000000-0000-4000-8000-000000000030
+	keyProperty: VoyageId
+
+	property VoyageId
+		dataType: string
+		lineageTag: 001a1fc8-a5e5-5cdb-ba93-a3e3bc711778
+
+	property DepartureDate
+		dataType: dateTime
+		lineageTag: 5b0917ac-b81c-5eab-bfea-1775dd41a2bb
+

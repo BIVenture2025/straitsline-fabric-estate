@@ -1,0 +1,8 @@
+model Model
+
+ref entity Vessel
+ref entity Port
+ref entity Voyage
+
+ref namespace default
+

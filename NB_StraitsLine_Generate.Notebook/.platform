@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "NB_StraitsLine_Generate",
+    "description": "P30 Phase 2 backfill driver. Imports straitsline_gen.py from Files/generator (SHA256-asserted), reads VL_StraitsLine, loads ref/ops/stream into LH_StraitsLine, writes ground truth to Files/ground_truth, reconciles."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "b351ff6d-ae98-b04a-4a60-797cf939a9f7"
+  }
+}

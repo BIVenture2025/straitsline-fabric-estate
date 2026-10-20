@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventstream",
+    "displayName": "ES_StraitsLine",
+    "description": "P30 component 4. Topology (CustomEndpoint source -> EH_StraitsLine) wired in the UI by the owner in S2; the authored eventstream.json is in 02_Platform and retried in S3 against the read-back schema."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bb4594f9-0659-b551-4107-543271116fb2"
+  }
+}

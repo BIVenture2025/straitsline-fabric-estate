@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Eventhouse",
+    "displayName": "EH_StraitsLine",
+    "description": "P30 hot path (contract component 5): AIS pings + port events land here from ES_StraitsLine; KQL geofence derives port calls in S3. Distinct from the Ontology-owned Eventhouse."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "3bcd8ba7-7336-bc61-4510-b54a3633c160"
+  }
+}

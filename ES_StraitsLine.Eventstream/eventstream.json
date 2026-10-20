@@ -1,0 +1,50 @@
+{
+  "sources": [
+    {
+      "id": "53540c8c-321a-4237-b7ab-1fc37912bebe",
+      "name": "ais_custom_endpoint",
+      "type": "CustomEndpoint",
+      "properties": {}
+    }
+  ],
+  "destinations": [
+    {
+      "id": "d25388d3-e82b-4566-89e5-84bc272c4539",
+      "name": "eh_ais_ping_raw",
+      "type": "Eventhouse",
+      "properties": {
+        "dataIngestionMode": "ProcessedIngestion",
+        "workspaceId": "00000000-0000-0000-0000-000000000000",
+        "itemId": "f076029a-842f-95d6-4827-0f66038e4571",
+        "databaseName": "EH_StraitsLine",
+        "tableName": "ais_ping_raw",
+        "inputSerialization": {
+          "type": "Json",
+          "properties": {
+            "encoding": "UTF8"
+          }
+        }
+      },
+      "inputNodes": [
+        {
+          "name": "ES_StraitsLine-stream"
+        }
+      ]
+    }
+  ],
+  "streams": [
+    {
+      "id": "11b3dcfa-ec4f-445b-9096-d11eb801def1",
+      "name": "ES_StraitsLine-stream",
+      "type": "DefaultStream",
+      "properties": {},
+      "inputNodes": [
+        {
+          "name": "ais_custom_endpoint"
+        }
+      ]
+    }
+  ],
+  "operators": [],
+  "compatibilityLevel": "1.0"
+}
