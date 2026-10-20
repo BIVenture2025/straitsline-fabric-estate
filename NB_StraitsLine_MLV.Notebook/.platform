@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "NB_StraitsLine_MLV",
+    "description": "P30 Phase 4. Creates 8 materialized lake views (silver + gold) over LH_StraitsLine and grades them against a T-SQL oracle, writing evidence to audit.mlv_assertions and audit.mlv_verification."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "bb372500-d7f7-a9fd-40cd-b4142228f068"
+  }
+}
