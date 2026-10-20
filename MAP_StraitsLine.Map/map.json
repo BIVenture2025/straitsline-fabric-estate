@@ -1,0 +1,156 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/map/definition/2.0.0/schema.json",
+  "basemap": {
+    "options": {
+      "center": [
+        104.5,
+        3.2
+      ],
+      "zoom": 4.6,
+      "style": "grayscale_dark",
+      "showLabels": true,
+      "styleOverrides": {
+        "adminDistrict2": {
+          "borderVisible": false
+        },
+        "buildingFootprint": {
+          "visible": false
+        }
+      }
+    },
+    "controls": {
+      "zoom": true,
+      "compass": true,
+      "scale": true,
+      "style": true
+    },
+    "theme": "default"
+  },
+  "dataSources": [
+    {
+      "itemType": "KqlDatabase",
+      "workspaceId": "00000000-0000-0000-0000-000000000000",
+      "itemId": "f076029a-842f-95d6-4827-0f66038e4571"
+    }
+  ],
+  "iconSources": [],
+  "layerSources": [
+    {
+      "id": "3e52c8e8-93ac-56f7-b153-3c2238976cc3",
+      "name": "Live vessel positions",
+      "type": "kusto",
+      "options": {
+        "cluster": false
+      },
+      "itemId": "f076029a-842f-95d6-4827-0f66038e4571",
+      "refreshIntervalMs": 5000
+    },
+    {
+      "id": "ad9eb2ea-d57e-5493-8667-8cf52b908a6c",
+      "name": "Port polygons",
+      "type": "kusto",
+      "itemId": "f076029a-842f-95d6-4827-0f66038e4571",
+      "refreshIntervalMs": 0
+    },
+    {
+      "id": "68ff6367-3919-5e38-b94b-83ab07d82e6a",
+      "name": "Planned routes",
+      "type": "kusto",
+      "itemId": "f076029a-842f-95d6-4827-0f66038e4571",
+      "refreshIntervalMs": 0
+    }
+  ],
+  "layerSettings": [
+    {
+      "id": "ae5721a3-6c28-54eb-8c15-823987e84644",
+      "name": "Planned routes",
+      "sourceId": "68ff6367-3919-5e38-b94b-83ab07d82e6a",
+      "options": {
+        "type": "vector",
+        "visible": true,
+        "color": "#4A6FA5",
+        "lineOptions": {
+          "strokeColor": "#4A6FA5",
+          "strokeWidth": 1,
+          "strokeOpacity": 0.5
+        },
+        "tooltipKeys": [
+          "Leg",
+          "DistanceNm"
+        ],
+        "enablePopups": true
+      },
+      "geometryColumnName": "Route"
+    },
+    {
+      "id": "e63b8031-3789-5899-82da-853aaab6fbb1",
+      "name": "Port polygons",
+      "sourceId": "ad9eb2ea-d57e-5493-8667-8cf52b908a6c",
+      "options": {
+        "type": "vector",
+        "visible": true,
+        "color": "#E8A33D",
+        "polygonOptions": {
+          "fillColor": "#E8A33D",
+          "fillOpacity": 0.18
+        },
+        "lineOptions": {
+          "strokeColor": "#E8A33D",
+          "strokeWidth": 1
+        },
+        "dataLabelOptions": {
+          "enabled": true,
+          "size": 11,
+          "allowOverlap": false
+        },
+        "dataLabelKeys": [
+          "PortName"
+        ],
+        "tooltipKeys": [
+          "PortId",
+          "PortName",
+          "Country"
+        ],
+        "enablePopups": true
+      },
+      "geometryColumnName": "Polygon"
+    },
+    {
+      "id": "f689bb1b-e6af-5f50-8569-990fb43a72c5",
+      "name": "Live vessel positions",
+      "sourceId": "3e52c8e8-93ac-56f7-b153-3c2238976cc3",
+      "options": {
+        "type": "vector",
+        "visible": true,
+        "color": "#2EC4B6",
+        "pointLayerType": "bubble",
+        "bubbleOptions": {
+          "color": "#2EC4B6",
+          "sizeType": "fixed",
+          "fixedSize": 7,
+          "strokeColor": "#06302B",
+          "strokeWidth": 1,
+          "opacity": 0.95
+        },
+        "dataLabelOptions": {
+          "enabled": true,
+          "size": 10,
+          "allowOverlap": false
+        },
+        "dataLabelKeys": [
+          "VesselId"
+        ],
+        "tooltipKeys": [
+          "VesselId",
+          "Status",
+          "SpeedKn",
+          "CourseDeg",
+          "EventTime"
+        ],
+        "enablePopups": true
+      },
+      "latitudeColumnName": "Latitude",
+      "longitudeColumnName": "Longitude"
+    }
+  ]
+}

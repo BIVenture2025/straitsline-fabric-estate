@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "NB_StraitsLine_Replay"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "e00d8222-ac6e-a732-4ec9-ffc0449d5a07"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Map",
+    "displayName": "MAP_StraitsLine",
+    "description": "P30 component 6: live vessel positions, port polygons and planned routes, three kusto layers over EH_StraitsLine."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7aef861e-4c9a-bdbe-4178-9f4c06d732ac"
+  }
+}

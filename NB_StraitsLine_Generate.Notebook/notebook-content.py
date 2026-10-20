@@ -35,7 +35,7 @@
 # **Before running:** upload `01_Source/generator/straitsline_gen.py` to this
 # lakehouse under `Files/generator/`. The notebook is only a driver -- all of the
 # logic lives in that module, which is imported, never restated. It is checked against
-# SHA256 `343c9d229202fba5f75530134c2efb0d07da3c623cb8251e4fb4746c244dab08` before import, so a stale upload stops the run instead of quietly
+# SHA256 `c4c596343b597f359feb9d93aee2fc9da9a231a7f676926641630c9e9de3a6f5` before import, so a stale upload stops the run instead of quietly
 # generating different data.
 # 
 # Parameters come from Variable Library **VL_StraitsLine** at run time; nothing is scaled
@@ -48,7 +48,7 @@
 import hashlib, os, sys
 
 GEN_DIR = "/lakehouse/default/Files/generator"
-EXPECTED_SHA256 = "343c9d229202fba5f75530134c2efb0d07da3c623cb8251e4fb4746c244dab08"
+EXPECTED_SHA256 = "c4c596343b597f359feb9d93aee2fc9da9a231a7f676926641630c9e9de3a6f5"
 _path = os.path.join(GEN_DIR, "straitsline_gen.py")
 
 if not os.path.exists(_path):
