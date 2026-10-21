@@ -1,8 +1,20 @@
 model Model
 
+ref table port
+ref table vessel
+ref table customer
+ref table voyage
+ref table booking
+ref table port_call_performance
+ref table container_demurrage
+
 ref entity Vessel
 ref entity Port
 ref entity Voyage
+ref entity Customer
+ref entity Booking
+ref entity PortCall
+ref entity Container
 
 ref namespace default
 

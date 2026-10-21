@@ -1,0 +1,31 @@
+/// Backing table for the ontology: ref.customer over OneLake (DirectLake).
+table customer
+	lineageTag: f3674e94-8e27-5f01-902e-38878e2d6987
+
+	column customer_id
+		dataType: string
+		lineageTag: 0960958e-de4a-57d1-8cb2-c8c9aae3daee
+		sourceColumn: customer_id
+
+	column name
+		dataType: string
+		lineageTag: f805d53b-54aa-5c3e-b745-e46252eaad46
+		sourceColumn: name
+
+	column segment
+		dataType: string
+		lineageTag: bc3b3805-6a1b-5319-ba6d-8760868146f8
+		sourceColumn: segment
+
+	column country
+		dataType: string
+		lineageTag: 9e3cc8b4-e9b7-5b11-90ec-70ad378fbc99
+		sourceColumn: country
+
+	partition customer = entity
+		mode: directLake
+		source
+			entityName: customer
+			schemaName: ref
+			expressionSource: DatabaseQuery
+

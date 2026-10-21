@@ -1,0 +1,163 @@
+/// Fact: voyage grain, 60 rows. CONTRIBUTION MARGIN, not net P&L - no bunker/port/THC source exists. Columns duplicating a dimension or duplicating Container Demurrage are hidden so no user can double count.
+table 'Voyage Economics'
+
+	measure Voyages = COUNTROWS ( 'Voyage Economics' )
+		formatString: #,0
+		displayFolder: Economics
+
+	measure 'Freight USD' = SUM ( 'Voyage Economics'[freight_usd] )
+		formatString: $#,0
+		displayFolder: Economics
+
+	/// Vessel operating cost only. Bunker, port charges, pilotage and terminal handling have no source table.
+	measure 'Vessel Opex USD' = SUM ( 'Voyage Economics'[vessel_opex_usd] )
+		formatString: $#,0
+		displayFolder: Economics
+
+	/// Freight + demurrage - vessel opex. NOT net profit: the missing cost lines are the largest ones in a real feeder P&L. Do not relabel this as profit.
+	measure 'Contribution Margin USD' = SUM ( 'Voyage Economics'[contribution_margin_usd] )
+		formatString: $#,0
+		displayFolder: Economics
+
+	/// Denominator is total revenue including demurrage.
+	measure 'Contribution Margin %' = DIVIDE ( [Contribution Margin USD], [Freight USD] + [Demurrage USD] )
+		formatString: 0.0%
+		displayFolder: Economics
+
+	/// Named 'Total TEU' because a measure may not share a name with a column on its own table, and [teu] is that column.
+	measure 'Total TEU' = SUM ( 'Voyage Economics'[teu] )
+		formatString: #,0
+		displayFolder: Economics
+
+	measure 'Revenue per TEU' = DIVIDE ( [Freight USD], [Total TEU] )
+		formatString: $#,0
+		displayFolder: Economics
+
+	/// COALESCE to 0 is deliberate: CALCULATE over an empty filter returns BLANK, which renders as an empty KPI card rather than a zero. Caught by the measure read-back, not by the measure existing. Expected 0 here, and that is NOT a realistic feeder result - it follows from the missing cost lines.
+	measure 'Loss-making Voyages' =
+			COALESCE (
+			    CALCULATE ( [Voyages], 'Voyage Economics'[contribution_margin_usd] < 0 ),
+			    0
+			)
+		formatString: #,0
+		displayFolder: Economics
+
+	column voyage_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: voyage_id
+
+	column vessel_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: vessel_id
+
+	column service_code
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: service_code
+
+	column service_name
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: service_name
+
+	column departure_date
+		dataType: dateTime
+		isHidden
+		summarizeBy: none
+		sourceColumn: departure_date
+
+	column vessel_name
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: vessel_name
+
+	column teu_capacity
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: teu_capacity
+
+	column daily_opex_usd
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: daily_opex_usd
+
+	column freight_usd
+		dataType: decimal
+		summarizeBy: none
+		sourceColumn: freight_usd
+
+	column teu
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: teu
+
+	column bookings
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: bookings
+
+	/// HIDDEN DELIBERATELY: the same money is in Container Demurrage at container grain. Demurrage measures read that table only.
+	column demurrage_usd
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: demurrage_usd
+
+	column liable_containers
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: liable_containers
+
+	column containers
+		dataType: int64
+		isHidden
+		summarizeBy: none
+		sourceColumn: containers
+
+	column first_arrival
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: first_arrival
+
+	column last_departure
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: last_departure
+
+	column port_calls
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: port_calls
+
+	column duration_seconds
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: duration_seconds
+
+	column vessel_opex_usd
+		dataType: decimal
+		summarizeBy: none
+		sourceColumn: vessel_opex_usd
+
+	column contribution_margin_usd
+		dataType: decimal
+		summarizeBy: none
+		sourceColumn: contribution_margin_usd
+
+	partition 'Voyage Economics' = entity
+		mode: directLake
+		source
+			entityName: voyage_pnl
+			schemaName: gold
+			expressionSource: 'DirectLake - LH_StraitsLine'
+

@@ -1,0 +1,27 @@
+/// A customer's booked slot on a voyage, priced in freight USD.
+entity Booking
+	lineageTag: 2636097e-55a1-586e-955c-d267ccb4803b
+	backingTable: booking
+	keyProperty: BookingId
+
+	property BookingId
+		dataType: string
+		lineageTag: e75b9792-8b71-59b3-ab32-bd707a1a4f60
+
+		backingConfiguration
+			valueColumn: booking.booking_id
+
+	property Teu
+		dataType: int64
+		lineageTag: 5ba8fe75-0008-5482-827e-070c5993ab77
+
+		backingConfiguration
+			valueColumn: booking.teu
+
+	property FreightUsd
+		dataType: double
+		lineageTag: a4057298-0c04-558c-8557-9af641710f7e
+
+		backingConfiguration
+			valueColumn: booking.freight_usd
+

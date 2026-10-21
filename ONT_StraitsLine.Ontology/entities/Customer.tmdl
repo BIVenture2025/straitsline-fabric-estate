@@ -1,0 +1,34 @@
+/// A shipper or forwarder booking space on a StraitsLine voyage.
+entity Customer
+	lineageTag: 037476e2-045d-5c25-8832-e47eab33f454
+	backingTable: customer
+	keyProperty: CustomerId
+
+	property CustomerId
+		dataType: string
+		lineageTag: 0bb8d5c1-f526-54c3-9c66-095b10f3a89f
+
+		backingConfiguration
+			valueColumn: customer.customer_id
+
+	property CustomerName
+		dataType: string
+		lineageTag: 89cf1c3c-dc32-5759-8339-ee370243e37f
+
+		backingConfiguration
+			valueColumn: customer.name
+
+	property Segment
+		dataType: string
+		lineageTag: 6ef76730-54db-5e14-af8d-d1b7d72acb81
+
+		backingConfiguration
+			valueColumn: customer.segment
+
+	property Country
+		dataType: string
+		lineageTag: fe1163cd-42b3-5d27-bd97-a6e51a98d8eb
+
+		backingConfiguration
+			valueColumn: customer.country
+

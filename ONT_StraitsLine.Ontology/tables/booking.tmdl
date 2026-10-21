@@ -1,0 +1,46 @@
+/// Backing table for the ontology: ops.booking over OneLake (DirectLake).
+table booking
+	lineageTag: 252e15b4-4565-50f2-b50c-165c1cbd8664
+
+	column booking_id
+		dataType: string
+		lineageTag: 564db65e-2b18-5c7d-9067-32a124a4d480
+		sourceColumn: booking_id
+
+	column customer_id
+		dataType: string
+		lineageTag: 749343f5-83f3-5887-a5a6-0878235f5a4b
+		sourceColumn: customer_id
+
+	column voyage_id
+		dataType: string
+		lineageTag: e8498e27-c62e-5b32-9af6-a983ea10605d
+		sourceColumn: voyage_id
+
+	column pol
+		dataType: string
+		lineageTag: c31a870a-00e8-5a39-a54c-eea2c429cbd7
+		sourceColumn: pol
+
+	column pod
+		dataType: string
+		lineageTag: 9076d7f5-f294-53f2-8e57-3bd192d6827d
+		sourceColumn: pod
+
+	column teu
+		dataType: int64
+		lineageTag: 34483a82-786b-5d86-bda8-67fbefb939fe
+		sourceColumn: teu
+
+	column freight_usd
+		dataType: double
+		lineageTag: 0a2bbf3e-2b82-5794-9849-98690381f350
+		sourceColumn: freight_usd
+
+	partition booking = entity
+		mode: directLake
+		source
+			entityName: booking
+			schemaName: ops
+			expressionSource: DatabaseQuery
+

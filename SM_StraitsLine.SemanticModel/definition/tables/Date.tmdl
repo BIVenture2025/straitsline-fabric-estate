@@ -1,0 +1,57 @@
+/// Date dimension for the report time axis. Calculated table over a fixed CALENDAR range - references NO Direct Lake column, which Learn lists as supported in all scenarios rather than the preview path. Range 2026-08-01..2026-10-31 covers departure_date (Aug 1 - Sep 21) and container gate_out (to Oct 12). Added columns are built inside the expression, not as calculated columns, because Direct Lake on OneLake calculated columns are User-Context-only, unmaterialized and cannot carry a relationship.
+table Date
+	dataCategory: Time
+
+	/// Date key. The date-table marking is the table's dataCategory Time; isKey is NOT available because the engine holds an auto RowNumber key column.
+	column Date
+		formatString: dd mmm yyyy
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+	column Year
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year]
+
+	column 'Month No'
+		isHidden
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month No]
+
+	column Month
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month]
+		sortByColumn: 'Month No'
+
+	/// Month axis label. Sorts by Year Month Key, NOT alphabetically - with Oct present, alphabetical order would read Aug, Oct, Sep.
+	column 'Month Year'
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Month Year]
+		sortByColumn: 'Year Month Key'
+
+	column 'Year Month Key'
+		isHidden
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Year Month Key]
+
+	column 'Day of Week'
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Day of Week]
+		sortByColumn: 'Day of Week No'
+
+	column 'Day of Week No'
+		isHidden
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Day of Week No]
+
+	partition Date = calculated
+		mode: import
+		source = ADDCOLUMNS ( CALENDAR ( DATE ( 2026, 8, 1 ), DATE ( 2026, 10, 31 ) ), "Year", YEAR ( [Date] ), "Month No", MONTH ( [Date] ), "Month", FORMAT ( [Date], "mmm" ), "Month Year", FORMAT ( [Date], "mmm yyyy" ), "Year Month Key", YEAR ( [Date] ) * 100 + MONTH ( [Date] ), "Day of Week", FORMAT ( [Date], "ddd" ), "Day of Week No", WEEKDAY ( [Date], 2 ) )
+

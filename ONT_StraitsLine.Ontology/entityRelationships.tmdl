@@ -1,10 +1,54 @@
+/// The vessel operating the voyage.
 entityRelationship VoyageOperatedBy
 	lineageTag: b0000000-0000-4000-8000-000000000001
 	fromEntity: Voyage
 	toEntity: Vessel
 
-entityRelationship VoyageCallsAt
-	lineageTag: b0000000-0000-4000-8000-000000000002
-	fromEntity: Voyage
+	backingConfiguration
+		relationship: rel_voyage_vessel
+
+/// The port a call was made at.
+entityRelationship PortCallAtPort
+	lineageTag: 07954ae6-32fc-5e52-9c9b-2c030da20cf1
+	fromEntity: PortCall
 	toEntity: Port
+
+	backingConfiguration
+		relationship: rel_portcall_port
+
+/// The voyage that made the call.
+entityRelationship PortCallOnVoyage
+	lineageTag: ee7a87ea-f387-51c3-b5aa-a6510a782139
+	fromEntity: PortCall
+	toEntity: Voyage
+
+	backingConfiguration
+		relationship: rel_portcall_voyage
+
+/// The voyage a booking is carried on.
+entityRelationship BookingOnVoyage
+	lineageTag: 3722642c-c3a5-50f8-9fb6-e63a7492363c
+	fromEntity: Booking
+	toEntity: Voyage
+
+	backingConfiguration
+		relationship: rel_booking_voyage
+
+/// The customer who placed the booking.
+entityRelationship BookingForCustomer
+	lineageTag: 10f0067c-7790-53c2-a974-c02c1961075d
+	fromEntity: Booking
+	toEntity: Customer
+
+	backingConfiguration
+		relationship: rel_booking_customer
+
+/// The booking a container moves under.
+entityRelationship ContainerUnderBooking
+	lineageTag: e31a8630-b06e-5406-a38b-6cb08720a131
+	fromEntity: Container
+	toEntity: Booking
+
+	backingConfiguration
+		relationship: rel_container_booking
 

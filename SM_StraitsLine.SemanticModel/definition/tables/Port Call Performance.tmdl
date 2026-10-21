@@ -1,0 +1,131 @@
+/// Fact: voyage x port, 300 rows. Berth wait, turnaround and schedule variance, all in integer seconds. (Was probe arm 2: it proved Direct Lake binds a MATERIALIZED LAKE VIEW as an entity, which no prior project had shown.)
+table 'Port Call Performance'
+
+	measure 'Port Calls' = COUNTROWS ( 'Port Call Performance' )
+		formatString: #,0
+		displayFolder: Port Calls
+
+	measure 'Avg Berth Wait Hours' = DIVIDE ( SUM ( 'Port Call Performance'[berth_wait_seconds] ), [Port Calls] * 3600 )
+		formatString: 0.0
+		displayFolder: Port Calls
+
+	measure 'Median Berth Wait Hours' = DIVIDE ( MEDIANX ( 'Port Call Performance', 'Port Call Performance'[berth_wait_seconds] ), 3600 )
+		formatString: 0.0
+		displayFolder: Port Calls
+
+	measure 'Avg Turnaround Hours' = DIVIDE ( SUM ( 'Port Call Performance'[turnaround_seconds] ), [Port Calls] * 3600 )
+		formatString: 0.0
+		displayFolder: Port Calls
+
+	/// Injected ground truth, carried for reconciliation. No detection threshold reads it.
+	measure 'Congested Port Calls' = SUM ( 'Port Call Performance'[in_congestion_window] )
+		formatString: #,0
+		displayFolder: Port Calls
+
+	/// Ratio of two measured averages, congested over uncongested. Named 'bite' and not 'impact' because it is a ratio, not a causal claim.
+	measure 'Congestion Bite (mean)' =
+			DIVIDE (
+			    CALCULATE ( [Avg Berth Wait Hours], 'Port Call Performance'[in_congestion_window] = 1 ),
+			    CALCULATE ( [Avg Berth Wait Hours], 'Port Call Performance'[in_congestion_window] = 0 )
+			)
+		formatString: 0.00
+		displayFolder: Port Calls
+
+	/// Positive = arrived after ETA.
+	measure 'Avg Arrival Variance Hours' = DIVIDE ( SUM ( 'Port Call Performance'[arrival_variance_seconds] ), [Port Calls] * 3600 )
+		formatString: +0.0;-0.0
+		displayFolder: Port Calls
+
+	measure 'Calls Arriving Late' = CALCULATE ( [Port Calls], 'Port Call Performance'[arrival_variance_seconds] > 0 )
+		formatString: #,0
+		displayFolder: Port Calls
+
+	/// Share of calls arriving at or before ETA.
+	measure 'Schedule Reliability %' = 1 - DIVIDE ( [Calls Arriving Late], [Port Calls] )
+		formatString: 0.0%
+		displayFolder: Port Calls
+
+	/// The MEDIAN-based bite. This is the statistic CONTROL_TOTALS records (2.93x, accepted S4 as just under the spec's 3-5x band). It exists alongside the mean-based measure so the model cannot present whichever number happens to fall inside the band - choosing the flattering statistic after the fact is the P25 rule in reverse.
+	measure 'Congestion Bite (median)' =
+			DIVIDE (
+			    CALCULATE ( [Median Berth Wait Hours], 'Port Call Performance'[in_congestion_window] = 1 ),
+			    CALCULATE ( [Median Berth Wait Hours], 'Port Call Performance'[in_congestion_window] = 0 )
+			)
+		formatString: 0.00
+		displayFolder: Port Calls
+
+	column port_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: port_id
+
+	column berth_wait_seconds
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: berth_wait_seconds
+
+	column voyage_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: voyage_id
+
+	column vessel_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: vessel_id
+
+	column ata
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: ata
+
+	column atb
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: atb
+
+	column atd
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: atd
+
+	column eta
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: eta
+
+	column etd
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: etd
+
+	column turnaround_seconds
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: turnaround_seconds
+
+	column arrival_variance_seconds
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: arrival_variance_seconds
+
+	column departure_variance_seconds
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: departure_variance_seconds
+
+	/// Injected ground truth, carried for reconciliation only. No detection threshold reads it.
+	column in_congestion_window
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: in_congestion_window
+
+	partition 'Port Call Performance' = entity
+		mode: directLake
+		source
+			entityName: port_call_performance
+			schemaName: gold
+			expressionSource: 'DirectLake - LH_StraitsLine'
+

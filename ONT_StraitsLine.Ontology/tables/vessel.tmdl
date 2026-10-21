@@ -1,0 +1,36 @@
+/// Backing table for the ontology: ref.vessel over OneLake (DirectLake).
+table vessel
+	lineageTag: c32e589a-1ea4-5e76-b77d-1b01b9b9b0f4
+
+	column vessel_id
+		dataType: string
+		lineageTag: 7bb5e40c-4bd8-5b81-bda2-392e3ee05233
+		sourceColumn: vessel_id
+
+	column name
+		dataType: string
+		lineageTag: bb1f348a-d58b-55da-a445-f3b7ed53ff3b
+		sourceColumn: name
+
+	column teu_capacity
+		dataType: int64
+		lineageTag: cb07e53b-5f2a-5a6a-b792-d33b41b66bd5
+		sourceColumn: teu_capacity
+
+	column service_speed_kn
+		dataType: double
+		lineageTag: eb6cdc38-4aad-5b68-8313-6bb10aa55de2
+		sourceColumn: service_speed_kn
+
+	column daily_opex_usd
+		dataType: int64
+		lineageTag: 17cbb524-706e-5fc0-bda8-51078f909b33
+		sourceColumn: daily_opex_usd
+
+	partition vessel = entity
+		mode: directLake
+		source
+			entityName: vessel
+			schemaName: ref
+			expressionSource: DatabaseQuery
+

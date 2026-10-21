@@ -3,7 +3,7 @@
   "metadata": {
     "type": "Ontology",
     "displayName": "ONT_StraitsLine",
-    "description": "P30 ontology - S1 kill-criterion test: Vessel, Port, Voyage + 2 relationships, ontology-first (unbound)."
+    "description": "P30 component 8 - BOUND ontology, 7 entities over LH_StraitsLine (ref/ops/gold) with 6 backed entity relationships."
   },
   "config": {
     "version": "2.0",

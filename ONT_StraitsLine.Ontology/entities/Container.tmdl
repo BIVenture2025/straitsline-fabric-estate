@@ -1,0 +1,41 @@
+/// A container moved under a booking. Dwell is terminal time (demurrage); detention is OUT of scope - no empty-return timestamp exists.
+entity Container
+	lineageTag: 738c1419-729b-5d50-9488-d145a276dbb9
+	backingTable: container_demurrage
+	keyProperty: ContainerId
+
+	property ContainerId
+		dataType: string
+		lineageTag: bcd300ec-ce0c-5b3b-9bba-f84a39649d3f
+
+		backingConfiguration
+			valueColumn: container_demurrage.container_id
+
+	property Size
+		dataType: string
+		lineageTag: 13e2e970-61e4-5803-9262-db03977eb20f
+
+		backingConfiguration
+			valueColumn: container_demurrage.size
+
+	property DwellSeconds
+		dataType: int64
+		lineageTag: 8244f274-be9f-5ccb-8827-1cfb059249d2
+
+		backingConfiguration
+			valueColumn: container_demurrage.dwell_seconds
+
+	property DemurrageUsd
+		dataType: int64
+		lineageTag: 8c8aa3a3-3df7-5f74-adf2-e99b2b0576ff
+
+		backingConfiguration
+			valueColumn: container_demurrage.demurrage_usd
+
+	property IsDemurrageLiable
+		dataType: int64
+		lineageTag: 9be1ab6f-a70a-56f9-b398-c8e3556cc0e4
+
+		backingConfiguration
+			valueColumn: container_demurrage.is_demurrage_liable
+

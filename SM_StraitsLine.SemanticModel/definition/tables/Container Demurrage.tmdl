@@ -1,0 +1,119 @@
+/// Fact: container grain, 9000 rows. The ONLY source of demurrage measures in this model.
+table 'Container Demurrage'
+
+	measure Containers = COUNTROWS ( 'Container Demurrage' )
+		formatString: #,0
+		displayFolder: Demurrage
+
+	/// Demurrage billed. Read ONLY from this table; Voyage Economics carries the same money rolled up and its copy is hidden.
+	measure 'Demurrage USD' = SUM ( 'Container Demurrage'[demurrage_usd] )
+		formatString: $#,0
+		displayFolder: Demurrage
+
+	measure 'Liable Containers' = SUM ( 'Container Demurrage'[is_demurrage_liable] )
+		formatString: #,0
+		displayFolder: Demurrage
+
+	measure 'Liability Rate %' = DIVIDE ( [Liable Containers], [Containers] )
+		formatString: 0.0%
+		displayFolder: Demurrage
+
+	/// Billed days, part-days rounded up per carrier convention.
+	measure 'Chargeable Days' = SUM ( 'Container Demurrage'[billed_days] )
+		formatString: #,0
+		displayFolder: Demurrage
+
+	/// Derived from integer seconds, not the generator's 3dp dwell_days column.
+	measure 'Avg Dwell Days' = DIVIDE ( SUM ( 'Container Demurrage'[dwell_seconds] ), [Containers] * 86400 )
+		formatString: 0.00
+		displayFolder: Demurrage
+
+	measure 'Demurrage per Liable Container' = DIVIDE ( [Demurrage USD], [Liable Containers] )
+		formatString: $#,0
+		displayFolder: Demurrage
+
+	column container_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: container_id
+
+	column booking_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: booking_id
+
+	column voyage_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: voyage_id
+
+	column customer_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column pol
+		dataType: string
+		summarizeBy: none
+		sourceColumn: pol
+
+	column pod
+		dataType: string
+		summarizeBy: none
+		sourceColumn: pod
+
+	column size
+		dataType: string
+		summarizeBy: none
+		sourceColumn: size
+
+	column discharge_ts
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: discharge_ts
+
+	column gate_out_ts
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: gate_out_ts
+
+	column dwell_seconds
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: dwell_seconds
+
+	column chargeable_seconds
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: chargeable_seconds
+
+	column tariff_usd_per_day
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: tariff_usd_per_day
+
+	column is_demurrage_liable
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: is_demurrage_liable
+
+	column billed_days
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: billed_days
+
+	column demurrage_usd
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: demurrage_usd
+
+	partition 'Container Demurrage' = entity
+		mode: directLake
+		source
+			entityName: container_demurrage
+			schemaName: gold
+			expressionSource: 'DirectLake - LH_StraitsLine'
+

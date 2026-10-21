@@ -1,0 +1,66 @@
+/// Backing table for the ontology: gold.container_demurrage over OneLake (DirectLake).
+table container_demurrage
+	lineageTag: 766a5219-60d0-5a56-9592-0ea883e483c1
+
+	column container_id
+		dataType: string
+		lineageTag: f858895f-96cb-5980-8821-8b6e1461e4c3
+		sourceColumn: container_id
+
+	column booking_id
+		dataType: string
+		lineageTag: 4588c02e-da8b-51d9-a33f-f7afc47c9346
+		sourceColumn: booking_id
+
+	column voyage_id
+		dataType: string
+		lineageTag: 6451550f-babe-5562-b53e-62cff1ae8410
+		sourceColumn: voyage_id
+
+	column customer_id
+		dataType: string
+		lineageTag: 781ff60c-96d0-54a0-9d0b-3c59e3366924
+		sourceColumn: customer_id
+
+	column size
+		dataType: string
+		lineageTag: a3162b92-179e-52a8-9ef4-2eb978b931df
+		sourceColumn: size
+
+	column discharge_ts
+		dataType: dateTime
+		lineageTag: efda6ff7-431e-55de-84ba-2f19668b5709
+		sourceColumn: discharge_ts
+
+	column gate_out_ts
+		dataType: dateTime
+		lineageTag: 71146c04-59db-59b5-8c93-26bf8cd75feb
+		sourceColumn: gate_out_ts
+
+	column dwell_seconds
+		dataType: int64
+		lineageTag: 89e26d97-9d78-55cf-b60c-fe04262e2a24
+		sourceColumn: dwell_seconds
+
+	column chargeable_seconds
+		dataType: int64
+		lineageTag: b6892683-755e-50b4-8bb3-cc497f1754a5
+		sourceColumn: chargeable_seconds
+
+	column demurrage_usd
+		dataType: int64
+		lineageTag: da415324-e69a-52f7-8a88-c9fa2b6acbe9
+		sourceColumn: demurrage_usd
+
+	column is_demurrage_liable
+		dataType: int64
+		lineageTag: 7a629b7e-52a2-576d-b2ec-b792f93fac55
+		sourceColumn: is_demurrage_liable
+
+	partition container_demurrage = entity
+		mode: directLake
+		source
+			entityName: container_demurrage
+			schemaName: gold
+			expressionSource: DatabaseQuery
+

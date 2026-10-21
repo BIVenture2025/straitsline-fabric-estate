@@ -1,0 +1,66 @@
+/// Backing table for the ontology: gold.port_call_performance over OneLake (DirectLake).
+table port_call_performance
+	lineageTag: b73f133c-cf02-59c8-903c-331c76d5c8e2
+
+	column voyage_id
+		dataType: string
+		lineageTag: 35e70b3a-d7ea-57f2-9b52-654c3f3e0815
+		sourceColumn: voyage_id
+
+	column port_id
+		dataType: string
+		lineageTag: b1b2d618-70fc-5890-801f-1b9c9ca8567c
+		sourceColumn: port_id
+
+	column port_name
+		dataType: string
+		lineageTag: 705a59dc-ece5-5b7f-9790-f23d5e5d9a2c
+		sourceColumn: port_name
+
+	column ata
+		dataType: dateTime
+		lineageTag: 66f87e06-a31b-57d9-92f8-76377e5366b4
+		sourceColumn: ata
+
+	column atb
+		dataType: dateTime
+		lineageTag: eff84f50-b605-5cd7-9cb4-c3e88a9cf9a0
+		sourceColumn: atb
+
+	column atd
+		dataType: dateTime
+		lineageTag: 7b85d0fb-e3f4-572f-817a-e56c126278e1
+		sourceColumn: atd
+
+	column eta
+		dataType: dateTime
+		lineageTag: 91cf9b3f-55f5-50cd-8f46-d47301712276
+		sourceColumn: eta
+
+	column berth_wait_seconds
+		dataType: int64
+		lineageTag: d66dc728-e1f2-584f-9ca9-53f00f35dc16
+		sourceColumn: berth_wait_seconds
+
+	column turnaround_seconds
+		dataType: int64
+		lineageTag: 2ea0964d-f41c-57ee-99c1-e4571d6f7546
+		sourceColumn: turnaround_seconds
+
+	column arrival_variance_seconds
+		dataType: int64
+		lineageTag: ef826531-7878-5266-bdcc-3b12595fc7cb
+		sourceColumn: arrival_variance_seconds
+
+	column in_congestion_window
+		dataType: int64
+		lineageTag: c99c3425-9c74-5b79-9dce-098726659745
+		sourceColumn: in_congestion_window
+
+	partition port_call_performance = entity
+		mode: directLake
+		source
+			entityName: port_call_performance
+			schemaName: gold
+			expressionSource: DatabaseQuery
+

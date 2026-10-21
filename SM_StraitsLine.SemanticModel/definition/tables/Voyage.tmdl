@@ -1,0 +1,41 @@
+/// Dimension: 60 voyages, 5 per vessel.
+table Voyage
+
+	column voyage_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: voyage_id
+
+	column vessel_id
+		dataType: string
+		isHidden
+		summarizeBy: none
+		sourceColumn: vessel_id
+
+	column service_code
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_code
+
+	column service_name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: service_name
+
+	column departure_date
+		dataType: dateTime
+		summarizeBy: none
+		sourceColumn: departure_date
+
+	column rotation
+		dataType: string
+		summarizeBy: none
+		sourceColumn: rotation
+
+	partition Voyage = entity
+		mode: directLake
+		source
+			entityName: voyage
+			schemaName: ops
+			expressionSource: 'DirectLake - LH_StraitsLine'
+

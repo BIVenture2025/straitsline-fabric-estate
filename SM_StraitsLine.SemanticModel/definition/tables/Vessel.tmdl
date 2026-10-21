@@ -1,0 +1,35 @@
+/// Dimension: the 12-vessel feeder fleet.
+table Vessel
+
+	column vessel_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: vessel_id
+
+	column name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: name
+
+	column teu_capacity
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: teu_capacity
+
+	column service_speed_kn
+		dataType: double
+		summarizeBy: none
+		sourceColumn: service_speed_kn
+
+	column daily_opex_usd
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: daily_opex_usd
+
+	partition Vessel = entity
+		mode: directLake
+		source
+			entityName: vessel
+			schemaName: ref
+			expressionSource: 'DirectLake - LH_StraitsLine'
+

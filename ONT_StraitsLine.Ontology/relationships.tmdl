@@ -1,0 +1,24 @@
+relationship rel_portcall_port
+	fromColumn: port_call_performance.port_id
+	toColumn: port.port_id
+
+relationship rel_portcall_voyage
+	fromColumn: port_call_performance.voyage_id
+	toColumn: voyage.voyage_id
+
+relationship rel_booking_voyage
+	fromColumn: booking.voyage_id
+	toColumn: voyage.voyage_id
+
+relationship rel_booking_customer
+	fromColumn: booking.customer_id
+	toColumn: customer.customer_id
+
+relationship rel_container_booking
+	fromColumn: container_demurrage.booking_id
+	toColumn: booking.booking_id
+
+relationship rel_voyage_vessel
+	fromColumn: voyage.vessel_id
+	toColumn: vessel.vessel_id
+

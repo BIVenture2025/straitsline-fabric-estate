@@ -1,0 +1,28 @@
+relationship ContainerDemurrage_Voyage
+	fromColumn: 'Container Demurrage'.voyage_id
+	toColumn: Voyage.voyage_id
+
+relationship ContainerDemurrage_Customer
+	fromColumn: 'Container Demurrage'.customer_id
+	toColumn: Customer.customer_id
+
+relationship PortCallPerformance_Voyage
+	fromColumn: 'Port Call Performance'.voyage_id
+	toColumn: Voyage.voyage_id
+
+relationship PortCallPerformance_Port
+	fromColumn: 'Port Call Performance'.port_id
+	toColumn: Port.port_id
+
+relationship VoyageEconomics_Voyage
+	fromColumn: 'Voyage Economics'.voyage_id
+	toColumn: Voyage.voyage_id
+
+relationship Voyage_Vessel
+	fromColumn: Voyage.vessel_id
+	toColumn: Vessel.vessel_id
+
+relationship Voyage_Date
+	fromColumn: Voyage.departure_date
+	toColumn: Date.Date
+

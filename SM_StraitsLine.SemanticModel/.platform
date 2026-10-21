@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "SM_StraitsLine",
+    "description": "P30 component 9. Direct Lake semantic model over the Gold materialized lake views in LH_StraitsLine. Measures and tables authored via the hosted Power BI Authoring MCP."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "04b2128b-194c-9006-418e-452ddda5bc65"
+  }
+}

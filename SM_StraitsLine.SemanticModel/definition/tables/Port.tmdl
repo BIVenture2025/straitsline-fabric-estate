@@ -1,0 +1,40 @@
+/// Dimension: 10 Straits/SE Asia ports. Plain Delta table in the ref schema. (Was probe arm 1: it proved Direct Lake binds a NON-DEFAULT schema, which P24 had only shown for dbo.)
+table Port
+
+	column port_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: port_id
+
+	column name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: name
+
+	column berths
+		dataType: int64
+		summarizeBy: none
+		sourceColumn: berths
+
+	column country
+		dataType: string
+		summarizeBy: none
+		sourceColumn: country
+
+	column lat
+		dataType: double
+		summarizeBy: none
+		sourceColumn: lat
+
+	column lon
+		dataType: double
+		summarizeBy: none
+		sourceColumn: lon
+
+	partition Port = entity
+		mode: directLake
+		source
+			entityName: port
+			schemaName: ref
+			expressionSource: 'DirectLake - LH_StraitsLine'
+

@@ -1,13 +1,27 @@
-/// Voyage in the StraitsLine feeder network.
+/// One round trip of a vessel on a service rotation.
 entity Voyage
 	lineageTag: a0000000-0000-4000-8000-000000000030
+	backingTable: voyage
 	keyProperty: VoyageId
 
 	property VoyageId
 		dataType: string
 		lineageTag: 001a1fc8-a5e5-5cdb-ba93-a3e3bc711778
 
+		backingConfiguration
+			valueColumn: voyage.voyage_id
+
 	property DepartureDate
 		dataType: dateTime
 		lineageTag: 5b0917ac-b81c-5eab-bfea-1775dd41a2bb
+
+		backingConfiguration
+			valueColumn: voyage.departure_date
+
+	property ServiceName
+		dataType: string
+		lineageTag: f62c3cc1-6d68-581c-a967-359f7cdaf3d8
+
+		backingConfiguration
+			valueColumn: voyage.service_name
 

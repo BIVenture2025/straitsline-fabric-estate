@@ -1,0 +1,41 @@
+/// Backing table for the ontology: ref.port over OneLake (DirectLake).
+table port
+	lineageTag: acd7ce14-68bb-5ccd-be34-465630ccbeb2
+
+	column port_id
+		dataType: string
+		lineageTag: cbd6e50f-8cd2-5244-ba42-29994dd1102f
+		sourceColumn: port_id
+
+	column name
+		dataType: string
+		lineageTag: a3b1e9c7-d97e-599b-a69a-7bace7530d0c
+		sourceColumn: name
+
+	column country
+		dataType: string
+		lineageTag: 981f9ed2-56d8-5807-8294-716a7c3da1d1
+		sourceColumn: country
+
+	column berths
+		dataType: int64
+		lineageTag: 12f0f9d9-50fa-5a95-859d-5567720b4035
+		sourceColumn: berths
+
+	column lat
+		dataType: double
+		lineageTag: e4587be6-5ed6-539a-bb62-208c5ee4793d
+		sourceColumn: lat
+
+	column lon
+		dataType: double
+		lineageTag: bfacbdcc-c289-5e4f-81bd-e6afc5d11da5
+		sourceColumn: lon
+
+	partition port = entity
+		mode: directLake
+		source
+			entityName: port
+			schemaName: ref
+			expressionSource: DatabaseQuery
+

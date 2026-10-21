@@ -1,0 +1,30 @@
+/// Dimension: 40 booking customers.
+table Customer
+
+	column customer_id
+		dataType: string
+		summarizeBy: none
+		sourceColumn: customer_id
+
+	column name
+		dataType: string
+		summarizeBy: none
+		sourceColumn: name
+
+	column segment
+		dataType: string
+		summarizeBy: none
+		sourceColumn: segment
+
+	column country
+		dataType: string
+		summarizeBy: none
+		sourceColumn: country
+
+	partition Customer = entity
+		mode: directLake
+		source
+			entityName: customer
+			schemaName: ref
+			expressionSource: 'DirectLake - LH_StraitsLine'
+

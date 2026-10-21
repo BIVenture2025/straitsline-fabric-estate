@@ -1,0 +1,41 @@
+/// Backing table for the ontology: ops.voyage over OneLake (DirectLake).
+table voyage
+	lineageTag: a067bfda-392a-564f-95e2-4f5e8256b4a8
+
+	column voyage_id
+		dataType: string
+		lineageTag: 59363255-ceb1-5b1b-a773-d52f27c80bc0
+		sourceColumn: voyage_id
+
+	column vessel_id
+		dataType: string
+		lineageTag: 9da0e1c2-8b1d-52ba-b3e5-57809b98d4a2
+		sourceColumn: vessel_id
+
+	column service_code
+		dataType: string
+		lineageTag: 5964d7f4-c281-5202-9827-71ab14347954
+		sourceColumn: service_code
+
+	column service_name
+		dataType: string
+		lineageTag: 1a541992-34dd-5141-9d57-5fd97be4b043
+		sourceColumn: service_name
+
+	column departure_date
+		dataType: dateTime
+		lineageTag: 8701ac67-79c1-534a-9877-e4e0e73673b8
+		sourceColumn: departure_date
+
+	column rotation
+		dataType: string
+		lineageTag: 5805545a-77ed-5723-afe3-96b124b63063
+		sourceColumn: rotation
+
+	partition voyage = entity
+		mode: directLake
+		source
+			entityName: voyage
+			schemaName: ops
+			expressionSource: DatabaseQuery
+

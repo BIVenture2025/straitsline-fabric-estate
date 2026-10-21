@@ -1,0 +1,40 @@
+/// A vessel's call at a port on a voyage. NO keyProperty: the grain is (voyage_id, port_id) and no scalar key column exists in any port-call table; keyProperty is documented optional. InCongestionWindow is the generator's injected ground truth and must NEVER be used as a detector.
+entity PortCall
+	lineageTag: 17b51c6b-e570-50f9-a98e-052953ad652e
+	backingTable: port_call_performance
+
+	property PortName
+		dataType: string
+		lineageTag: c81946e3-dd78-505e-8e55-b06603e41796
+
+		backingConfiguration
+			valueColumn: port_call_performance.port_name
+
+	property Ata
+		dataType: dateTime
+		lineageTag: 0cd4a117-35c1-583d-a3e9-06afe755b855
+
+		backingConfiguration
+			valueColumn: port_call_performance.ata
+
+	property BerthWaitSeconds
+		dataType: int64
+		lineageTag: e580497f-dde5-5c3b-a651-b3b81acc56e2
+
+		backingConfiguration
+			valueColumn: port_call_performance.berth_wait_seconds
+
+	property TurnaroundSeconds
+		dataType: int64
+		lineageTag: ef5590d7-ffb3-5e1a-8920-1fe5efe5a57f
+
+		backingConfiguration
+			valueColumn: port_call_performance.turnaround_seconds
+
+	property InCongestionWindow
+		dataType: int64
+		lineageTag: 34de62d0-5f6a-5e0c-ba28-691a7b3e479e
+
+		backingConfiguration
+			valueColumn: port_call_performance.in_congestion_window
+
