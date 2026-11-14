@@ -229,6 +229,14 @@ INNER JOIN ops.booking b
 -- GOLD 1/4 -- gold.port_call_performance : the berth-wait / turnaround / schedule-variance
 -- fact. Expected 300. in_congestion_window is the generator's injected truth, carried for
 -- reconciliation only -- no detection threshold reads it.
+--
+-- port_call_id ADDED 2026-10-21 (post-S6b). The Fabric IQ graph will not materialize an entity
+-- without a scalar key, and the port-call grain (voyage_id, port_id) has no single key column in
+-- ANY port-call table -- gold.port_call_performance, silver.port_call, ops.port_call_plan and
+-- ops.port_call_truth were all checked. The column is added HERE, in place, rather than as a 9th
+-- view, so contract 3's "6-8 MLVs" still holds at 8. It is derived, not stored upstream, and the
+-- separator "|" cannot occur in either id (both are generated as alphanumeric). Uniqueness is
+-- asserted, not assumed: see the port_call_id assertions in build_nb_mlv.py.
 -- -------------------------------------------------------------------------------------
 CREATE OR REPLACE MATERIALIZED LAKE VIEW gold.port_call_performance
 (
@@ -237,6 +245,7 @@ CREATE OR REPLACE MATERIALIZED LAKE VIEW gold.port_call_performance
 )
 COMMENT "P30 Gold: port call performance: berth wait, turnaround, schedule variance. Synthetic data."
 AS SELECT
+    CONCAT(pc.voyage_id, '|', pc.port_id) AS port_call_id,
     pc.voyage_id,
     pc.port_id,
     pc.vessel_id,
@@ -693,6 +702,26 @@ print("row counts")
 for view, exp in EXPECT_ROWS.items():
     got = next((c["row_count"] for c in capture if c["view_name"] == view), None)
     grade(f"rows {view}", exp, got, 0, "GOLD_SPEC s3")
+
+print("\nport_call_id - the graph's scalar key, PROVEN not assumed")
+# The Fabric IQ graph refuses an entity without a scalar key (measured 2026-10-21: PortCall read
+# Ineligible while the other 6 entities were Eligible). port_call_id is DERIVED, so all three of
+# its properties have to be asserted rather than trusted:
+#   1. it is unique        - 300 rows must yield 300 distinct values, or it is not a key
+#   2. it is never null    - a null key makes the row unreachable in the graph
+#   3. the separator is safe - if "|" could occur inside either id, two different calls could
+#      collide on one key and the uniqueness count alone would NOT catch every such case
+grade("port_call_id distinct values", 300,
+      scalar("SELECT COUNT(DISTINCT port_call_id) FROM gold.port_call_performance"), 0,
+      "must equal the 300 row count: proves uniqueness")
+grade("port_call_id nulls or blanks", 0,
+      scalar("SELECT COUNT(*) FROM gold.port_call_performance "
+             "WHERE port_call_id IS NULL OR LENGTH(TRIM(port_call_id)) = 0"), 0,
+      "a null key makes the row unreachable in the graph")
+grade("port_call_id separator collisions", 0,
+      scalar("SELECT COUNT(*) FROM gold.port_call_performance "
+             "WHERE voyage_id LIKE '%|%' OR port_id LIKE '%|%'"), 0,
+      "no component id may contain the separator")
 
 print("\ndedupe evidenced against the dirty layer")
 grade("ais_ping source rows (pre-dedupe)", 131544,

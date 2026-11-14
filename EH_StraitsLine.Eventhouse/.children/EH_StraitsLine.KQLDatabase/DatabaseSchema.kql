@@ -2,3 +2,87 @@
 // Use management commands in this script to configure your database items, such as tables, functions, materialized views, and more.
 
 
+.create-merge table ais_ping_raw (ping_id:string, vessel_id:string, ts:datetime, lat:real, lon:real, sog:real, cog:real) 
+.create-or-alter table ais_ping_raw ingestion json mapping 'ais_ping_raw_map'
+```
+[{"Properties":{"Path":"$.ping_id"},"column":"ping_id","datatype":""},{"Properties":{"Path":"$.vessel_id"},"column":"vessel_id","datatype":""},{"Properties":{"Path":"$.ts"},"column":"ts","datatype":""},{"Properties":{"Path":"$.lat"},"column":"lat","datatype":""},{"Properties":{"Path":"$.lon"},"column":"lon","datatype":""},{"Properties":{"Path":"$.sog"},"column":"sog","datatype":""},{"Properties":{"Path":"$.cog"},"column":"cog","datatype":""}]
+```
+.create-merge table port_ref (port_id:string, name:string, country:string, lat:real, lon:real, polygon:dynamic) 
+.create-merge table ais_ping (ping_id:string, vessel_id:string, ts:datetime, lat:real, lon:real, sog:real, cog:real, port_id:string, in_port:bool) 
+.create-merge table route_ref (from_port:string, to_port:string, distance_nm:real, route:dynamic) 
+.create-or-alter function with (folder = "StraitsLine/enrich", docstring = "Row-local geofence: tag each ping with the port polygon containing it, if any. One row in, one row out.", skipvalidation = "true") fn_enrich_ping() {
+    ais_ping_raw
+    | extend _k = 1
+    | join kind=leftouter (
+        port_ref
+        | project pr_port_id = port_id, pr_polygon = polygon, _k = 1
+      ) on _k
+    | extend _hit = geo_point_in_polygon(lon, lat, pr_polygon)
+    | summarize port_id = tostring(anyif(pr_port_id, _hit == true))
+        by ping_id, vessel_id, ts, lat, lon, sog, cog
+    | extend in_port = isnotempty(port_id)
+    | project ping_id, vessel_id, ts, lat, lon, sog, cog, port_id, in_port
+}
+.create-or-alter function with (folder = "StraitsLine/derive", docstring = "ais_ping deduplicated on (vessel_id, ts), ordered by event time.", skipvalidation = "true") fn_ping_clean() {
+    ais_ping
+    | summarize take_any(*) by vessel_id, ts
+}
+.create-or-alter function with (folder = "StraitsLine/derive", docstring = "Geofence-derived port calls: ata, atb, atd per vessel and port.", skipvalidation = "true") fn_port_calls() {
+    let SESSION_GAP = 32m;
+    let MIN_PINGS = 3;
+    let BERTH_SOG = 0.2;
+    fn_ping_clean()
+    | where in_port
+    // `sort` is what makes the row set serialized, which prev() and
+    // row_window_session() both require. row_window_session(Expr, MaxDistanceFromFirst,
+    // MaxDistanceBetweenNeighbors, Restart) returns the session's FIRST value, so it
+    // doubles as the grouping key. MaxDistanceFromFirst is 365d because a stay has no
+    // business maximum here -- the twelve idle-at-origin stays run for weeks -- and the
+    // Restart predicate is what stops a session running across a change of vessel or port.
+    | sort by vessel_id asc, port_id asc, ts asc
+    | extend session_id = row_window_session(
+        ts, 365d, SESSION_GAP,
+        vessel_id != prev(vessel_id) or port_id != prev(port_id))
+    // Berth: the first point at which a THREE-PING TRAILING mean of SOG drops below the
+    // moored threshold, timestamped at the FIRST ping of that window -- hence prev(ts, 2).
+    //
+    // This was written with series_fir() first, and the docs refuted it: series_fir
+    // defaults to center=false, a trailing filter whose output is group-delayed by
+    // (n-1)/2, and its first n-1 outputs are partial windows computed over fewer terms.
+    // That would have put every berth timestamp two ping intervals -- 16 minutes -- off
+    // the value the offline proof validated, and let a partial first window trip the
+    // threshold on a vessel that had not berthed. Written with prev() the indexing is
+    // visible on the page and matches the proof exactly.
+    | extend _same3 = vessel_id == prev(vessel_id, 2)
+                  and port_id == prev(port_id, 2)
+                  and session_id == prev(session_id, 2)
+    | extend _sog_m3 = iff(_same3, (sog + prev(sog, 1) + prev(sog, 2)) / 3.0, real(null))
+    | extend _berth_ts = iff(isnotnull(_sog_m3) and _sog_m3 < BERTH_SOG,
+                             prev(ts, 2), datetime(null))
+    | summarize ata = min(ts), atd = max(ts), pings = count(), atb = min(_berth_ts)
+      by vessel_id, port_id, session_id
+    // >= MIN_PINGS is the arrival convention. isnotnull(atb) is the stop test: a vessel
+    // that crossed the fence without ever going below the moored threshold was in
+    // transit, not on a call.
+    | where pings >= MIN_PINGS and isnotnull(atb)
+    | extend berth_wait_h = round((atb - ata) / 1h, 2),
+             alongside_h  = round((atd - atb) / 1h, 2),
+             in_port_h    = round((atd - ata) / 1h, 2)
+    | project vessel_id, port_id, ata, atb, atd, berth_wait_h, alongside_h, in_port_h, pings
+    | order by ata asc
+}
+.create-or-alter function with (folder = "StraitsLine/map", docstring = "Latest known position per vessel, named for the Map layer binding.", skipvalidation = "true") fn_latest_vessel_positions() {
+    fn_ping_clean()
+    | summarize arg_max(ts, *) by vessel_id
+    | project VesselId   = vessel_id,
+              Latitude   = lat,
+              Longitude  = lon,
+              SpeedKn    = round(sog, 1),
+              CourseDeg  = round(cog, 0),
+              EventTime  = ts,
+              Status     = iff(in_port, strcat("in port: ", port_id), "under way")
+}
+.alter table ais_ping_raw policy retention @'{"SoftDeletePeriod":"90.00:00:00","Recoverability":"Enabled"}'
+.alter table ais_ping_raw policy streamingingestion "{\"IsEnabled\":false,\"HintAllocatedRate\":null,\"NumberOfRowStores\":null,\"SealIntervalLimit\":null,\"SealThresholdBytes\":null,\"UsageTags\":[],\"IsMaintenanceActive\":false}"
+.alter table ais_ping_raw policy ingestionbatching @'{"MaximumBatchingTimeSpan":"00:00:30","MaximumNumberOfItems":500,"MaximumRawDataSizeMB":1024,"Origin":0}'
+.alter table ais_ping policy update "[{\"IsEnabled\":true,\"Source\":\"ais_ping_raw\",\"Query\":\"fn_enrich_ping()\",\"IsTransactional\":false,\"PropagateIngestionProperties\":true,\"ManagedIdentity\":null}]"

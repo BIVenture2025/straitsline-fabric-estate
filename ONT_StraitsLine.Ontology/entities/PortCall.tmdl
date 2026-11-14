@@ -1,7 +1,15 @@
-/// A vessel's call at a port on a voyage. NO keyProperty: the grain is (voyage_id, port_id) and no scalar key column exists in any port-call table; keyProperty is documented optional. InCongestionWindow is the generator's injected ground truth and must NEVER be used as a detector.
+/// A vessel's call at a port on a voyage. PortCallId is a DERIVED key (voyage_id|port_id) added to gold.port_call_performance on 2026-10-21: the grain has no natural scalar key, and the Fabric IQ graph refuses an entity without one - measured, PortCall read Ineligible while the other 6 entities were Eligible. Its uniqueness, non-nullness and separator safety are asserted in the MLV notebook, not assumed. InCongestionWindow is the generator's injected ground truth and must NEVER be used as a detector.
 entity PortCall
 	lineageTag: 17b51c6b-e570-50f9-a98e-052953ad652e
 	backingTable: port_call_performance
+	keyProperty: PortCallId
+
+	property PortCallId
+		dataType: string
+		lineageTag: 6c0d0322-5f3c-5608-9a56-5321b98c4837
+
+		backingConfiguration
+			valueColumn: port_call_performance.port_call_id
 
 	property PortName
 		dataType: string

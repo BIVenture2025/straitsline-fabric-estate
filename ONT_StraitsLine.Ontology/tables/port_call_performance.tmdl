@@ -2,6 +2,11 @@
 table port_call_performance
 	lineageTag: b73f133c-cf02-59c8-903c-331c76d5c8e2
 
+	column port_call_id
+		dataType: string
+		lineageTag: 2f0e3337-1367-5249-80ef-4e4cdd673d15
+		sourceColumn: port_call_id
+
 	column voyage_id
 		dataType: string
 		lineageTag: 35e70b3a-d7ea-57f2-9b52-654c3f3e0815
